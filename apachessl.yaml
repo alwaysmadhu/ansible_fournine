@@ -1,0 +1,45 @@
+---
+- name: Configure Apache With Self Signed Certs
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Configuring Apache SSL
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: '^(.*)ServerName(.*)$'
+        line: 'ServerName apachetest.com'
+        backrefs: yes
+
+    - name: Configuring Apache SSL
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: '^(.*)SSLCertificateFile(.*)$'
+        line: 'SSLCertificateFile /etc/ssl/certs/ansible.crt'
+        backrefs: yes
+
+    - name: Configuring Apache SSL
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: '^(.*)SSLCertificateKeyFile(.*)$'
+        line: 'SSLCertificateKeyFile /etc/ssl/private/ansible.key'
+        backrefs: yes
+
+    - name: Enable SSL
+      apache2_module:
+        name: ssl
+        state: present
+
+    - name: Enable Headers
+      apache2_module:
+        name: headers
+        state: present
+
+    - name: Enable SSL Site
+      command: a2ensite default-ssl
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+      become: yes   

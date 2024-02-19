@@ -1,0 +1,17 @@
+---
+- name: create a soft link and hard link
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: create a soft link
+      file:
+        src: /home/madhu/ansible/softlink
+        dest: /home/madhu/slink
+        state: link
+
+    - name: create a hard link
+      file:
+        src: /home/madhu/ansible/hardlink
+        dest: /home/madhu/hlink
+        state: hard

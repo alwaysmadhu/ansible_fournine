@@ -1,0 +1,19 @@
+---
+- name: Enable Apache Modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+    loop:
+      - proxy
+      - proxy_http
+      - proxy_html
+      - headers
+
+- name: Copy Reverse Proxy Conf 
+  template:
+    src: reverse_proxy.j2
+    dest: /etc/apache2/sites-available/reverse_proxy.conf
+
+- name: Enable Site
+  command: a2ensite reverse_proxy.conf
+  notify: restart apache

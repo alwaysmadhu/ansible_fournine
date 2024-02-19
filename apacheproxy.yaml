@@ -1,0 +1,34 @@
+---
+- name: Apache as Reverse Proxy
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Installing Apache and Modules
+      apt:
+        pkg:
+        - apache2
+        - apache2-utils
+
+    - name: Enable Apache Modules
+      apache2_module:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - proxy
+        - proxy_http
+        - proxy_html
+        - headers
+
+    - name: Copy Reverse Proxy Conf 
+      copy:
+        src: /home/madhu/ansible/reverse_proxy.conf
+        dest: /etc/apache2/sites-available/
+
+    - name: Enable Site
+      command: a2ensite reverse_proxy.conf
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted

@@ -1,0 +1,16 @@
+---
+- name: Generate Private Key
+  openssl_privatekey:
+    path: "{{ key_path }}"
+    size: 2048
+    type: RSA
+    mode: "0600"
+    state: present
+
+- name: Generate Certificate
+  community.crypto.x509_certificate:
+    path: "{{ cert_path }}"
+    privatekey_path: "{{ key_path }}"
+    provider: selfsigned
+    selfsigned_not_after: "+365d"
+    mode: "0644"

@@ -1,0 +1,37 @@
+---
+- name: setup logrotate
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Install logrotate
+      apt:
+        name: logrotate
+        state: present
+
+    - name: create a log file
+      file:
+        path: /var/log/test.log
+        state: touch
+        mode: "0644"
+
+    - name: create logrotate conf file
+      file:
+        path: /etc/logrotate.d/test.conf
+        state: touch
+        mode: "0644"
+
+    - name: add conf to logrotate file
+      blockinfile:
+        path: /etc/logrotate.d/test.conf
+        block: |
+          /var/log/test.log {
+            su root adm
+            daily
+            rotate 3
+            missingok
+            compress
+            create
+          }
+    - name: rotate logs
+      command: logrotate -f /etc/logrotate.d/test.conf

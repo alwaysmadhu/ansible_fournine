@@ -1,0 +1,47 @@
+---
+- name: create a directory with first domain name
+  file:
+    path: "{{ ansiblevh1 }}"
+    state: directory
+
+- name: create a html directory
+  file:
+    path: "{{ ansiblevh1 }}/html"
+    state: directory
+
+- name: copy index file
+  template:
+    src: index1.html.j2
+    dest: "{{ ansiblevh1_html }}/index.html"
+
+- name: copy config file
+  template:
+    src: domain1.conf.j2
+    dest: "{{ apache_site }}/ansiblevh1.com.conf"
+
+- name: create a directory with second domain name
+  file:
+    path: "{{ ansiblevh2 }}"
+    state: directory
+
+- name: create a html directory
+  file:
+    path: "{{ ansiblevh2 }}/html"
+    state: directory
+
+- name: copy index file
+  template:
+    src: index2.html.j2
+    dest: "{{ ansiblevh2_html }}/index.html"
+
+- name: copy config file
+  template:
+    src: domain2.conf.j2
+    dest: "{{ apache_site }}/ansiblevh2.com.conf"
+
+- name: enable virtual host
+  shell: |
+    a2ensite ansiblevh1.com.conf
+    a2ensite ansiblevh2.com.conf
+  notify:
+    - restart apache

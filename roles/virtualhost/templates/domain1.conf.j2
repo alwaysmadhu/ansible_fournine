@@ -1,0 +1,11 @@
+    <VirtualHost *:80>
+  
+    ServerAdmin alwaysmadhu06@gmail.com
+    ServerName ansiblevh1.com
+    ServerAlias www.ansiblevh1.com
+    DocumentRoot "{{ ansiblevh1_html }}"
+  
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+   
+    </VirtualHost>

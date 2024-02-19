@@ -1,0 +1,11 @@
+---
+- name: Apache Web Page
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: setting web page
+      copy:
+        src: /home/madhu/ansible/index.html
+        dest: /var/www/html/
+      

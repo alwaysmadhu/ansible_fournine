@@ -1,0 +1,11 @@
+---
+- name: Kill a Process Using PID
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Running Script
+      expect:
+        command: /home/madhu/ansible/killpid.sh
+        responses:
+          Enter the Name of the Process: "apache2"

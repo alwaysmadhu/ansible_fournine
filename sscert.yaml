@@ -1,0 +1,21 @@
+---
+- name: Generating Self Signed Certs
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Generate Private Key
+      openssl_privatekey:
+        path: /etc/ssl/private/ansible.key
+        size: 2048
+        type: RSA
+        mode: "0600"
+        state: present
+
+    - name: Generate Certificate
+      community.crypto.x509_certificate:
+        path: /etc/ssl/certs/ansible.crt
+        privatekey_path: /etc/ssl/private/ansible.key
+        provider: selfsigned
+        selfsigned_not_after: "+365d"
+        mode: "0644"

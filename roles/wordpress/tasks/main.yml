@@ -1,0 +1,66 @@
+---
+- name: Installing Apache2, Mariadb, PHP
+  apt:
+   pkg:
+   - apache2
+   - mariadb-server
+   - mariadb-client
+   - php
+   - php-mysql
+   - python3-pymysql
+  state: present
+
+- name: Remove Test DB
+  mysql_db:
+    name: test_db
+    state: absent
+    login_user: root
+    login_password: ''
+    login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: Remove Anonymous Users
+  mysql_user:
+    name: ''
+    state: absent
+    login_user: root
+    login_password: ''
+    login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: Create a New Database
+  mysql_db:
+    name: wordpress_db
+    state: present
+    login_user: root
+    login_password: ''
+    login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: Create a New User
+  mysql_user:
+    name: wp_user
+    password: 1234
+    state: present
+    priv: '*.*:ALL,GRANT'
+    login_user: root
+    login_password: ''
+    login_unix_socket: /run/mysqld/mysqld.sock
+
+- name: Download WordPress
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp/wordpress.tar.gz
+
+- name: Extract WordPress
+  unarchive:
+    src: /tmp/wordpress.tar.gz
+    dest: /var/www/html
+    owner: www-data
+    group: www-data
+    mode: "0755"
+
+- name: Create Uploads Directory
+  file:
+    path: /var/www/html/wordpress/wp-content/uploads
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"

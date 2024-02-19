@@ -1,0 +1,68 @@
+---
+- name: Apache Virtual Host
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: create a directory with first domain name
+      file:
+        path: /var/www/ansiblevh1.com
+        state: directory
+
+    - name: create a html directory
+      file:
+        path: /var/www/ansiblevh1.com/html
+        state: directory
+
+    - name: Copying html file
+      copy:
+        src: /home/madhu/ansible/vh1.html
+        dest: /var/www/ansiblevh1.com/html/index.html
+
+    - name: Copying config file
+      copy:
+        src: /home/madhu/ansible/vh1.conf
+        dest: /etc/apache2/sites-available/ansiblevh1.com.conf
+
+    - name: create a directory with second domain name
+      file:
+        path: /var/www/ansiblevh2.com
+        state: directory
+
+    - name: create a html directory
+      file:
+        path: /var/www/ansiblevh2.com/html
+        state: directory
+
+    - name: Copying html file
+      copy:
+        src: /home/madhu/ansible/vh2.html
+        dest: /var/www/ansiblevh2.com/html/index.html
+
+    - name: Copying config file
+      copy:
+        src: /home/madhu/ansible/vh2.conf
+        dest: /etc/apache2/sites-available/ansiblevh2.com.conf
+
+    - name: Enable Virtual Host
+      command: a2ensite ansiblevh1.com.conf
+
+    - name: Enable Virtual Host
+      command: a2ensite ansiblevh2.com.conf
+
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+
+    - name: add domain names to hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 127.0.0.1 ansiblevh1.com
+        state: present
+
+    - name: add domain names to hosts
+      lineinfile:
+        path: /etc/hosts
+        line: 127.0.0.1 ansiblevh2.com
+        state: present     

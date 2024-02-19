@@ -1,0 +1,17 @@
+---
+- name: A Sample Cron Job
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Add Cron Job
+      cron:
+        name: "Checking Date"
+        user: "madhu"
+        minute: "*/2"
+        hour: "*"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        job: "/bin/bash /home/madhu/ansible/date.sh"
+        state: present

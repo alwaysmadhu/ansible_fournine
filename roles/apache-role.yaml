@@ -1,0 +1,6 @@
+---
+- name: Apache Setup
+  hosts: localhost
+  become: yes
+  roles:
+    - ssl-cert

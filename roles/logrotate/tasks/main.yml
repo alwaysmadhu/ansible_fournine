@@ -1,0 +1,25 @@
+---
+- name: Install logrotate
+  apt:
+    name: logrotate
+    state: present
+
+- name: create a log file
+  file:
+    path: /var/log/test.log
+    state: touch
+    mode: "0644"
+
+- name: create logrotate conf file
+  file:
+    path: /etc/logrotate.d/test.conf
+    state: touch
+    mode: "0644"
+
+- name: add conf to logrotate file
+  template:
+    src: test.j2
+    dest: /etc/logrotate.d/test.conf
+
+- name: rotate logs
+  command: logrotate -f /etc/logrotate.d/test.conf

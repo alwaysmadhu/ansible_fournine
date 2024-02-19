@@ -1,0 +1,31 @@
+---
+- name: changing default web page location
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: create a directory
+      file:
+        path: /var/www/ansible
+        state: directory
+
+    - name: create a directory
+      file: 
+        path: /var/www/ansible/html
+        state: directory
+
+    - name: New Web Page
+      copy: 
+        src: /home/madhu/ansible/index1.html
+        dest: /var/www/ansible/html/index.html
+
+    - name: apache web page location
+      lineinfile:
+        path: /etc/apache2/sites-available/000-default.conf
+        regexp: 'DocumentRoot /var/www/html'
+        line: DocumentRoot /var/www/ansible/html
+
+    - name: Restart apache
+      service:
+        name: apache2
+        state: restarted

@@ -1,0 +1,6 @@
+---
+ansiblevh1: /var/www/ansiblevh1.com
+ansiblevh1_html: /var/www/ansiblevh1.com/html
+apache_site: /etc/apache2/sites-available
+ansiblevh2: /var/www/ansiblevh2.com
+ansiblevh2_html: /var/www/ansiblevh2.com/html
